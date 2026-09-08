@@ -7,8 +7,7 @@ const logger = require("morgan");
 require("dotenv").config();
 require("./database/database");
 // controllers
-const testJwtRoutes = require("./controllers/test-jwt");
-const authRoutes = require("./controllers/authCtrl");
+const authRoutes = require("./routers/authRouter");
 const isSignedin = require("./middlewares/isSignedin");
 
 app.use(cors());
@@ -16,9 +15,8 @@ app.use(express.json());
 app.use(logger("dev"));
 
 // Routes go here
-app.use("/test-jwt", testJwtRoutes);
-app.post("/auth/sign-up", authRoutes.signup);
-app.post("/auth/sign-in", authRoutes.signin);
+
+app.use("/auth", authRoutes);
 
 app.get("/protected", isSignedin, (req, res) => {
   try {
