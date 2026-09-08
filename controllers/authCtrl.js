@@ -9,7 +9,9 @@ const signup = async (req, res) => {
     //if the uer exists , send err msg
     const userExists = await User.findOne({ username: req.body.username });
     if (userExists) {
-      return res.status(409).json("username or password is incorrect");
+      return res
+        .status(409)
+        .json({ error: "username or password is incorrect" });
     }
 
     //encrypt the pw
@@ -34,4 +36,33 @@ const signup = async (req, res) => {
   }
 };
 
-module.exports = { signup };
+const signin = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.body.username });
+    if (!user) {
+      return res
+        .status(401)
+        .json({ error: "username or password is incorrect" });
+    }
+
+    const isMatch = bcrypt.compareSync(req.body.password, user.password);
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ error: "username or password is incorrect" });
+    }
+
+    const token = jwt.sign(
+      { username: user.username, _id: user._id },
+      process.env.JWT_SECRET,
+    );
+    res.status(200).json({
+      token,
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json(err.message || "errooooooorrrrrrrrr");
+  }
+};
+
+module.exports = { signup, signin };

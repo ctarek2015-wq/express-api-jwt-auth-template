@@ -17,6 +17,7 @@ app.use(logger("dev"));
 // Routes go here
 app.use("/test-jwt", testJwtRoutes);
 app.post("/auth/sign-up", authRoutes.signup);
+app.post("/auth/sign-in", authRoutes.signin);
 
 app.listen(3000, () => {
   console.log("The express app is ready!");
