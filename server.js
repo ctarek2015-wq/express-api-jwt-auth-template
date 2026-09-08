@@ -8,6 +8,7 @@ require("dotenv").config();
 require("./database/database");
 // controllers
 const testJwtRoutes = require("./controllers/test-jwt");
+const authRoutes = require("./controllers/authCtrl");
 
 app.use(cors());
 app.use(express.json());
@@ -15,6 +16,7 @@ app.use(logger("dev"));
 
 // Routes go here
 app.use("/test-jwt", testJwtRoutes);
+app.post("/auth/sign-up", authRoutes.signup);
 
 app.listen(3000, () => {
   console.log("The express app is ready!");

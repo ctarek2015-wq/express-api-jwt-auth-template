@@ -5,6 +5,12 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
+userSchema.set("toJSON", {
+  transform: (doc, useOBJ) => {
+    delete useOBJ.password;
+  },
+});
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
